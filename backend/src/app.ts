@@ -20,6 +20,7 @@ const corsOptions = {
         "https://fleat-frontend-aa7x.vercel.app",
         "http://localhost:5174",
         "https://fleet-master-chi.vercel.app",
+        "https://fleet-managment-rho.vercel.app"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
