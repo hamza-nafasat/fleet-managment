@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    newNotifications: [],
     notifications: [],
     loading: false,
     error: null,
@@ -11,7 +12,20 @@ const notificationSlice = createSlice({
     name: "notification",
     initialState,
     reducers: {
-        // get notifications
+        // get new notifications
+        // ------------------
+        getNewNotificationsStart: (state) => {
+            state.loading = true;
+        },
+        getNewNotificationsSuccess: (state, action) => {
+            state.loading = false;
+            state.newNotifications = action.payload.notifications;
+        },
+        getNewNotificationsFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        // get all notifications
         // ------------------
         getAllNotificationsStart: (state) => {
             state.loading = true;
@@ -24,7 +38,6 @@ const notificationSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-
         // read notification
         // ------------------
         readNotificationStart: (state) => {
@@ -35,6 +48,31 @@ const notificationSlice = createSlice({
             state.message = action.payload.message;
         },
         readNotificationFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        // read all notifications
+        // ------------------
+        readAllNotificationsStart: (state) => {
+            state.loading = true;
+        },
+        readAllNotificationsSuccess: (state) => {
+            state.loading = false;
+        },
+        readAllNotificationsFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        // delete notification
+        // ------------------
+        deleteNotificationStart: (state) => {
+            state.loading = true;
+        },
+        deleteNotificationSuccess: (state, action) => {
+            state.loading = false;
+            state.message = action.payload.message;
+        },
+        deleteNotificationFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
@@ -56,6 +94,15 @@ export const {
     readNotificationStart,
     readNotificationSuccess,
     readNotificationFailure,
+    readAllNotificationsStart,
+    readAllNotificationsSuccess,
+    readAllNotificationsFailure,
+    deleteNotificationStart,
+    deleteNotificationSuccess,
+    deleteNotificationFailure,
+    getNewNotificationsStart,
+    getNewNotificationsSuccess,
+    getNewNotificationsFailure,
     clearNotificationMessage,
     clearNotificationError,
 } = notificationSlice.actions;

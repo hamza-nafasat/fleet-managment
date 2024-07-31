@@ -6,7 +6,7 @@ import NotifictionIcon from "../../../../../assets/svgs/NotifictionIcon";
 import { getAllNotificationsAction } from "../../../../../redux/actions/notification.actions";
 import NotificationContent from "./NotificationContent";
 
-const Notification = ({ notifications }) => {
+const Notification = ({ notifications, length }) => {
     const dispatch = useDispatch();
 
     const [notiOpen, setNotiOpen] = useState(null);

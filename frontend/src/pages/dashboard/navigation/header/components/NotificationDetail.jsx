@@ -1,171 +1,83 @@
-import React, { useState } from "react";
+import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import DeleteIcon from "../../../../../assets/svgs/geofence/DeleteIcon";
 import DownloadIcon from "../../../../../assets/svgs/reports/DownloadIcon";
-import EditIcon from "../../../../../assets/svgs/settings/EditIcon";
-// import Modal from "../../../../../components/modal/Modal";
-// import EditAlert from "./components/EditAlert";
-
-const rows = [
-    {
-        id: 1,
-        NotificationDetail: "infrared sunglasses",
-        notificationType: "on platform",
-        date: "01/14/2024 - 02:31",
-        severityType: "High",
-        status: "Enabled",
-        actions: "",
-    },
-    {
-        id: 2,
-        NotificationDetail: "infrared sunglasses",
-        notificationType: "on platform",
-        date: "01/14/2024 - 02:31",
-        severityType: "High",
-        status: "Enabled",
-        actions: "",
-    },
-    {
-        id: 3,
-        NotificationDetail: "infrared sunglasses",
-        notificationType: "on platform",
-        date: "01/14/2024 - 02:31",
-        severityType: "High",
-        status: "Enabled",
-        actions: "",
-    },
-    {
-        id: 4,
-        NotificationDetail: "infrared sunglasses",
-        notificationType: "on platform",
-        date: "01/14/2024 - 02:31",
-        severityType: "High",
-        status: "Enabled",
-        actions: "",
-    },
-    {
-        id: 5,
-        NotificationDetail: "infrared sunglasses",
-        notificationType: "on platform",
-        date: "01/14/2024 - 02:31",
-        severityType: "High",
-        status: "Enabled",
-        actions: "",
-    },
-];
 
 const NotificationDetail = () => {
-    const [modalType, setModalType] = useState(null);
-    const handleOpenEditModal = () => setModalType("edit");
-    const handleCloseModal = () => setModalType(null);
+    const [isDelLoading, setIsDelLoading] = useState(false);
+    const [rows, setRows] = useState([]);
+    const { notifications } = useSelector((state) => state.notification);
+
+    const handleDeleteList = (row) => {
+        setIsDelLoading(true);
+        console.log(row);
+        setIsDelLoading(false);
+    };
+
+    useEffect(() => {
+        if (notifications) {
+            setRows(
+                notifications.map((notification) => {
+                    return {
+                        id: notification._id,
+                        type: notification.type,
+                        message: notification.message,
+                        createdAt:
+                            notification.createdAt.split("T")[0].split("-").reverse().join("-") +
+                            "  at  " +
+                            new Date(notification.createdAt).toLocaleString("en-US", {
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                            }),
+                    };
+                })
+            );
+        }
+    }, [notifications]);
+
     const columns = [
         {
-            field: "NotificationDetail",
-            headerName: "ALERT TYPE",
+            field: "type",
+            headerName: "Notification Type",
             headerAlign: "center",
             align: "center",
             width: 250,
         },
         {
-            field: "severityType",
-            headerName: "SEVERITY TYPE",
-            width: 150,
+            field: "message",
+            headerName: "Notification Message",
             headerAlign: "center",
             align: "center",
+            width: 500,
+        },
+        {
+            field: "createdAt",
+            headerName: "Created At",
+            headerAlign: "center",
+            align: "center",
+            width: 300,
+        },
+
+        {
+            field: "operation",
+            headerName: "OPERATION",
+            align: "center",
+            width: 120,
             renderCell: (params) => (
                 <Box
                     sx={{
-                        height: "50px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: "80%",
-                        margin: "auto",
+                        cursor: isDelLoading ? "not-allowed" : "pointer",
                     }}
+                    onClick={() => handleDeleteList(params.row)}
                 >
-                    <Box
-                        sx={{
-                            background: "#ff6554",
-                            borderRadius: "8px",
-                            color: "#fff",
-                            height: "42px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "100%",
-                        }}
-                    >
-                        {params.value}
-                    </Box>
-                </Box>
-            ),
-        },
-        {
-            field: "notificationType",
-            headerName: "NOTIFICATION TYPE",
-            headerAlign: "center",
-            align: "center",
-            width: 250,
-        },
-        {
-            field: "status",
-            headerName: "STATUS",
-            width: 250,
-            headerAlign: "center",
-            align: "center",
-            renderCell: (params) => (
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "0.5rem",
-                        height: "100%",
-                    }}
-                >
-                    <Typography>{params.value}</Typography>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={params.value === "Enabled"}
-                                onChange={(e) => {
-                                    const newValue = e.target.checked ? "Enabled" : "Disabled";
-                                    const updatedRows = rows.map((row) =>
-                                        row.id === params.id ? { ...row, status: newValue } : row
-                                    );
-                                    params.api.updateRows([{ id: params.id, status: newValue }]);
-                                }}
-                            />
-                        }
-                        label=""
-                    />
-                </Box>
-            ),
-        },
-        {
-            field: "actions",
-            headerName: "ACTIONS",
-            width: 250,
-            headerAlign: "center",
-            align: "center",
-            renderCell: () => (
-                <Box
-                    onClick={handleOpenEditModal}
-                    sx={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                        cursor: "pointer",
-                        height: "100%",
-                    }}
-                >
-                    <EditIcon />
+                    <DeleteIcon />
                 </Box>
             ),
         },
     ];
-
     return (
         <>
             <Box
@@ -192,10 +104,10 @@ const NotificationDetail = () => {
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5, 10, 20]}
-                    headerClassName={(params) => {
+                    headerClassName={() => {
                         return "MuiDataGrid-colCell-center";
                     }}
-                    cellClassName={(params) => {
+                    cellClassName={() => {
                         return "MuiDataGrid-cell-center";
                     }}
                     sx={{
@@ -256,11 +168,6 @@ const NotificationDetail = () => {
                     }}
                 />
             </Box>
-            {/* {modalType === 'edit' && (
-        <Modal onClose={handleCloseModal}>
-          <EditAlert onClose={handleCloseModal} />
-        </Modal>
-      )} */}
         </>
     );
 };

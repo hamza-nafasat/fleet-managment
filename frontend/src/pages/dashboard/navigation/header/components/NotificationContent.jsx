@@ -8,35 +8,32 @@ const NotificationContent = ({ notiOpen, handleNotificationClose }) => {
     const { notifications } = useSelector((state) => state.notification);
     console.log("notifications", notifications);
     return (
-        <>
-            <Menu
-                anchorEl={notiOpen}
-                open={Boolean(notiOpen)}
-                onClose={handleNotificationClose}
-                PaperProps={{
-                    sx: {
-                        width: "300px",
-                        height: "396px",
-                        borderRadius: "6px",
-                        boxShadow:
-                            "2px 2px 8px 0px rgba(0, 0, 0, 0.32), -2px 2px 8px 0px rgba(0, 0, 0, 0.32)",
-                        "&::-webkit-scrollbar": {
-                            width: "6px",
-                        },
-                        "&::-webkit-scrollbar-track": {
-                            background: "rgba(0, 25, 51, 0.2)",
-                            borderRadius: "4px",
-                        },
-                        "&::-webkit-scrollbar-thumb": {
-                            background: "rgba(0, 107, 206, 1)",
-                            borderRadius: "4px",
-                        },
+        <Menu
+            anchorEl={notiOpen}
+            open={Boolean(notiOpen)}
+            onClose={handleNotificationClose}
+            PaperProps={{
+                sx: {
+                    width: "300px",
+                    height: "396px",
+                    borderRadius: "6px",
+                    boxShadow: "2px 2px 8px 0px rgba(0, 0, 0, 0.32), -2px 2px 8px 0px rgba(0, 0, 0, 0.32)",
+                    "&::-webkit-scrollbar": {
+                        width: "6px",
                     },
-                }}
-            >
-                <NotificationInnerContent />
-            </Menu>
-        </>
+                    "&::-webkit-scrollbar-track": {
+                        background: "rgba(0, 25, 51, 0.2)",
+                        borderRadius: "4px",
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                        background: "rgba(0, 107, 206, 1)",
+                        borderRadius: "4px",
+                    },
+                },
+            }}
+        >
+            <NotificationInnerContent />
+        </Menu>
     );
 };
 
@@ -45,14 +42,19 @@ export default NotificationContent;
 const NotificationInnerContent = () => {
     const { notifications } = useSelector((state) => state.notification);
     return (
-        <Box>
-            <Box sx={{ display: "flex", gap: "1.3rem", p: 2 }}>
+        <Box height={"100%"} sx={{ overflow: "auto" }}>
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: "1.3rem",
+                    p: 2,
+                }}
+            >
                 <Typography sx={{ fontSize: "10px", color: "rgba(65, 65, 65, 1)" }}>Notifications</Typography>
                 <Typography sx={{ fontSize: "10px", color: "rgba(0, 107, 206, 1)", fontWeight: 500 }}>
                     {notifications?.length} Unread
                 </Typography>
             </Box>
-
             {notifications?.map((notification, index) => (
                 <NotificationItem
                     key={index}

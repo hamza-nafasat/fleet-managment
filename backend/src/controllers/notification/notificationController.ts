@@ -19,6 +19,12 @@ const getMyAllPresentNotifications = TryCatch(async (req: Request, res, next) =>
     if (!notifications) return next(createHttpError(404, "No Notifications Found"));
     res.status(200).json({ success: true, notifications });
 });
+const getMyAllNotification = TryCatch(async (req: Request, res, next) => {
+    const ownerId = req.user?._id;
+    const notifications = await Notification.find({ to: ownerId });
+    if (!notifications) return next(createHttpError(404, "No Notifications Found"));
+    res.status(200).json({ success: true, notifications });
+});
 
 const getSingleNotification = TryCatch(async (req: Request, res, next) => {
     const ownerId = req.user?._id;
@@ -27,6 +33,15 @@ const getSingleNotification = TryCatch(async (req: Request, res, next) => {
     const notification = await Notification.findOne({ _id: notificationId, to: ownerId });
     if (!notification) return next(createHttpError(404, "Notification Not Found"));
     res.status(200).json({ success: true, notification });
+});
+
+const deleteSingleNotification = TryCatch(async (req: Request, res, next) => {
+    const ownerId = req.user?._id;
+    const notificationId = req?.params?.notificationId;
+    if (!isValidObjectId(notificationId)) return next(createHttpError(400, "Invalid Notification Id"));
+    const notification = await Notification.findOneAndDelete({ _id: notificationId, to: ownerId });
+    if (!notification) return next(createHttpError(404, "Notification Not Found"));
+    res.status(200).json({ success: true, message: "Notification Deleted Successfully" });
 });
 
 const readTheNotification = TryCatch(async (req: Request, res, next) => {
@@ -42,4 +57,22 @@ const readTheNotification = TryCatch(async (req: Request, res, next) => {
     res.status(200).json({ success: true, notification });
 });
 
-export { createNotification, getMyAllPresentNotifications, getSingleNotification, readTheNotification };
+const readAllNotifications = TryCatch(async (req: Request, res, next) => {
+    const ownerId = req.user?._id;
+    const notifications = await Notification.updateMany(
+        { to: ownerId },
+        { isRead: true, readAt: new Date() }
+    );
+    if (!notifications) return next(createHttpError(404, "No Notifications Found"));
+    res.status(200).json({ success: true, notifications });
+});
+
+export {
+    createNotification,
+    getMyAllPresentNotifications,
+    getSingleNotification,
+    deleteSingleNotification,
+    readTheNotification,
+    getMyAllNotification,
+    readAllNotifications,
+};

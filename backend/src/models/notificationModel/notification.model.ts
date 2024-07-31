@@ -16,7 +16,7 @@ const notificationSchema = new Schema<NotificationSchemaTypes>(
         type: { type: String, required: true },
         message: { type: String, required: true },
         isRead: { type: Boolean, default: false },
-        readAt: { type: Date },
+        readAt: { type: Date, default: null },
     },
     {
         timestamps: true,
