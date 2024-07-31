@@ -20,5 +20,5 @@ export const notificationRoutes = (app: any) => {
 
     // read the notification
     app.put("/api/notification/read/:notificationId", auth, readTheNotification);
-    app.put("/api/notification/read-all", auth, readAllNotifications);
+    app.put("/api/notifications/read-all", auth, readAllNotifications);
 };

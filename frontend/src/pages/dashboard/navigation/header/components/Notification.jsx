@@ -2,33 +2,34 @@
 import { Box, styled } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import NotifictionIcon from "../../../../../assets/svgs/NotifictionIcon";
+import NotificationIcon from "../../../../../assets/svgs/NotifictionIcon";
 import { getAllNotificationsAction } from "../../../../../redux/actions/notification.actions";
 import NotificationContent from "./NotificationContent";
 
-const Notification = ({ notifications, length }) => {
+const Notification = ({ length }) => {
     const dispatch = useDispatch();
 
-    const [notiOpen, setNotiOpen] = useState(null);
+    const [notificationOpen, setNotificationOpen] = useState(null);
 
     const handleNotificationOpen = async (e) => {
-        setNotiOpen(e.currentTarget);
+        setNotificationOpen(e.currentTarget);
         await dispatch(getAllNotificationsAction());
     };
 
     const handleNotificationClose = () => {
-        setNotiOpen(null);
+        setNotificationOpen(null);
     };
 
     return (
         <>
             <NotificationBox onClick={handleNotificationOpen}>
-                <NotifictionIcon />
-                {notifications?.length > 0 && (
-                    <NotificationNumbers>{notifications.length}</NotificationNumbers>
-                )}
+                <NotificationIcon />
+                {length > 0 && <NotificationNumbers>{length}</NotificationNumbers>}
             </NotificationBox>
-            <NotificationContent notiOpen={notiOpen} handleNotificationClose={handleNotificationClose} />
+            <NotificationContent
+                notificationOpen={notificationOpen}
+                handleNotificationClose={handleNotificationClose}
+            />
         </>
     );
 };

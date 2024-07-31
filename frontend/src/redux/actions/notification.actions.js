@@ -66,10 +66,10 @@ const readNotificationAction = (notificationId) => async (dispatch) => {
 
 // read all notification
 // --------------------
-const readAllNotifications = () => async (dispatch) => {
+const readAllNotificationsAction = () => async (dispatch) => {
     try {
         dispatch(readAllNotificationsStart());
-        const response = await customAxios.patch("/notification/read-all");
+        const response = await customAxios.put("/notifications/read-all");
         console.log("read all notification api response ", response);
         dispatch(readAllNotificationsSuccess(response.data));
     } catch (error) {
@@ -101,7 +101,7 @@ const deleteNotificationAction = (notificationId) => async (dispatch) => {
 export {
     getAllNotificationsAction,
     readNotificationAction,
-    readAllNotifications,
+    readAllNotificationsAction,
     deleteNotificationAction,
     getNewNotificationsAction,
 };

@@ -17,7 +17,7 @@ import Otp from "./pages/auth/otp/Otp";
 import ResetPassword from "./pages/auth/reset-password/ResetPassword";
 import Dashboard from "./pages/dashboard";
 import { getDeviceDataAction } from "./redux/actions/device.actions";
-import { getAllNotificationsAction } from "./redux/actions/notification.actions";
+import { getAllNotificationsAction, getNewNotificationsAction } from "./redux/actions/notification.actions";
 import { getMyProfileAction } from "./redux/actions/user.actions";
 import { clearUserError, clearUserMessage } from "./redux/slices/user.slice";
 
@@ -59,6 +59,7 @@ function App() {
     useEffect(() => {
         dispatch(getMyProfileAction());
         dispatch(getAllNotificationsAction());
+        dispatch(getNewNotificationsAction());
     }, [dispatch]);
 
     // show message and error

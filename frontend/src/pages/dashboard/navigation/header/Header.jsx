@@ -12,7 +12,7 @@ const Header = () => {
     const [openNav, setOpenNav] = useState(false);
     const location = useLocation();
     let urlArr = location.pathname.split("/");
-    const { newNotifications, notifications } = useSelector((state) => state.notification);
+    const { newNotifications } = useSelector((state) => state.notification);
     let pageTitle = urlArr[urlArr.length - 1].replaceAll("-", " ");
 
     const toggleNav = (newOpen) => {
@@ -53,9 +53,7 @@ const Header = () => {
                 <SaudiLogoDiv>
                     <img src={SaudiLogo} alt="saudi logo" style={{ width: "92px", height: "auto" }} />
                 </SaudiLogoDiv>
-                {newNotifications?.length > 0 && (
-                    <Notification length={newNotifications?.length} notifications={notifications} />
-                )}
+                <Notification length={newNotifications?.length} />
                 <Box
                     onClick={() => toggleNav(true)}
                     sx={{

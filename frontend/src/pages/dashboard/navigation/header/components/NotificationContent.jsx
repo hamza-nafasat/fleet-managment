@@ -4,13 +4,13 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import NotificationItem from "./NotificationItem";
 
-const NotificationContent = ({ notiOpen, handleNotificationClose }) => {
+const NotificationContent = ({ notificationOpen, handleNotificationClose }) => {
     const { notifications } = useSelector((state) => state.notification);
     console.log("notifications", notifications);
     return (
         <Menu
-            anchorEl={notiOpen}
-            open={Boolean(notiOpen)}
+            anchorEl={notificationOpen}
+            open={Boolean(notificationOpen)}
             onClose={handleNotificationClose}
             PaperProps={{
                 sx: {
@@ -32,14 +32,14 @@ const NotificationContent = ({ notiOpen, handleNotificationClose }) => {
                 },
             }}
         >
-            <NotificationInnerContent />
+            <NotificationInnerContent handleNotificationClose={handleNotificationClose} />
         </Menu>
     );
 };
 
 export default NotificationContent;
 
-const NotificationInnerContent = () => {
+const NotificationInnerContent = ({ handleNotificationClose }) => {
     const { notifications } = useSelector((state) => state.notification);
     return (
         <Box height={"100%"} sx={{ overflow: "auto" }}>
@@ -65,6 +65,7 @@ const NotificationInnerContent = () => {
                 />
             ))}
             <Link
+                onClick={handleNotificationClose}
                 to="notification"
                 style={{
                     padding: "12px 0",
